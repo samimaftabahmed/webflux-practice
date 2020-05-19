@@ -37,5 +37,21 @@ public class FluxAndMonoTest {
                 .verifyComplete();
     }
 
+    @Test
+    public void fluxTestElementsWithErrors() {
 
+        Flux<String> stringFlux = Flux
+                .just("Spring", "Spring Boot", "Reactive Spring", "Non blocking Threads")
+                .concatWith(Flux.error(new RuntimeException("Exception Handled")))
+                .log();
+
+        StepVerifier.create(stringFlux)
+                .expectNext("Spring")
+                .expectNext("Spring Boot")
+                .expectNext("Reactive Spring")
+                .expectNext("Non blocking Threads")
+//                .expectError(RuntimeException.class)
+                .expectErrorMessage("Exception Handled")
+                .verify();
+    }
 }
