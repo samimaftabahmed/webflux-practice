@@ -2,6 +2,7 @@ package com.sam.webfluxpractice.FluxAndMono;
 
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 public class FluxAndMonoTest {
@@ -64,6 +65,28 @@ public class FluxAndMonoTest {
                 .expectNextCount(4)  //Exception not counted
 //                .expectError(RuntimeException.class)
                 .expectErrorMessage("Exception Handled")
+                .verify();
+    }
+
+    @Test
+    public void monoTest() {
+
+        Mono<String> stringMono = Mono.just("Spring");
+
+        StepVerifier
+                .create(stringMono.log())
+                .expectNext("Spring")
+                .verifyComplete();
+    }
+
+    @Test
+    public void monoTestWithError() {
+
+        Mono<String> stringMono = Mono.error(new RuntimeException());
+
+        StepVerifier
+                .create(stringMono.log())
+                .expectError(RuntimeException.class)
                 .verify();
     }
 }
