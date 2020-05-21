@@ -13,12 +13,13 @@ public class RouterFunctionConfig {
     public RouterFunction<ServerResponse> route(FluxAndMonoHandler fluxAndMonoHandler) {
 
         return RouterFunctions
-                .route(getPredicate("/function/flux"), fluxAndMonoHandler::functionalFlux)
-                .andRoute(getPredicate("/function/mono"), fluxAndMonoHandler::functionalMono);
+                .route(getPredicate("/function/flux", MediaType.APPLICATION_JSON), fluxAndMonoHandler::functionalFlux)
+                .andRoute(getPredicate("/function/mono", MediaType.APPLICATION_JSON), fluxAndMonoHandler::functionalMono)
+                .andRoute(getPredicate("/function/flux-stream", MediaType.APPLICATION_STREAM_JSON), fluxAndMonoHandler::functionalFluxStream);
     }
 
-    private RequestPredicate getPredicate(String uri) {
+    private RequestPredicate getPredicate(String uri, MediaType mediaType) {
 
-        return RequestPredicates.GET(uri).and(RequestPredicates.accept(MediaType.APPLICATION_JSON));
+        return RequestPredicates.GET(uri).and(RequestPredicates.accept(mediaType));
     }
 }
