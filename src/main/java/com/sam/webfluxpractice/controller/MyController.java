@@ -13,6 +13,4 @@ public class MyController {
 
         return "Welcome back Sam";
     }
-
-
 }
